@@ -13,6 +13,7 @@
             flex-direction: column; /* 세로 방향으로 정렬 */
             align-items: center; /* 수평 중앙 정렬 */
             background-color: black; /* 배경색을 검정으로 설정 */
+            color: white; /* 텍스트 색상 */
         }
 
         #animation {
@@ -33,6 +34,21 @@
         #bottomHalf {
             flex: 1; /* 하단 절반을 차지 */
             width: 100%; /* 전체 너비 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #currentWord {
+            margin-top: 20px; /* 상단 여백 */
+            font-size: 24px; /* 글자 크기 */
+        }
+
+        #animationURL {
+            margin-top: 10px; /* 상단 여백 */
+            font-size: 16px; /* 글자 크기 */
+            word-wrap: break-word; /* 긴 URL 줄 바꿈 */
         }
     </style>
 </head>
@@ -40,10 +56,15 @@
     <div id="topHalf">
         <img id="animation" src="" alt="애니메이션"> <!-- 이모티콘 이미지 -->
     </div>
-    <div id="bottomHalf"></div> <!-- 하단 절반은 비워둡니다 -->
+    <div id="bottomHalf">
+        <div id="currentWord">현재 단어: </div>
+        <div id="animationURL">애니메이션 URL: </div>
+    </div>
 
     <script>
         const animation = document.getElementById('animation');
+        const currentWordDisplay = document.getElementById('currentWord');
+        const animationURLDisplay = document.getElementById('animationURL');
 
         // 애니메이션 파일 매핑 (모든 URL에 2 추가)
         const animationMap = {
@@ -155,6 +176,7 @@
             const words = text.split(' ');
             if (words.length > 0) {
                 const currentWord = words[words.length - 1].trim(); // 현재 단어를 가져오고 공백 제거
+                currentWordDisplay.textContent = '현재 단어: ' + currentWord; // 현재 단어를 화면에 표시
                 console.log('현재 단어:', currentWord); // 현재 단어를 콘솔에 출력
 
                 // 디바운싱 적용
@@ -167,12 +189,14 @@
                         if (animationMap[currentWord]) {
                             animation.src = animationMap[currentWord];
                             animation.style.display = 'block';
+                            animationURLDisplay.textContent = '애니메이션 URL: ' + animation.src; // 애니메이션 URL을 화면에 표시
                             console.log('애니메이션 URL:', animation.src); // 애니메이션 URL을 콘솔에 출력
                         } else {
                             animation.style.display = 'none'; // 애니메이션이 없을 경우 숨김
+                            animationURLDisplay.textContent = '애니메이션 URL: '; // URL 초기화
                         }
                     }
-                }, 300); // 300ms 대기
+                }, 500); // 디바운싱 시간을 500ms로 늘림
             }
         };
 
