@@ -66,7 +66,7 @@
         const currentWordDisplay = document.getElementById('currentWord');
         const animationURLDisplay = document.getElementById('animationURL');
 
-        // 애니메이션 파일 매핑 (모든 URL에 2 추가)
+        // 애니메이션 파일 매핑
         const animationMap = {
             '나': 'https://sangeunpark-hong.github.io/lucy/me2.gif',
             '내': 'https://sangeunpark-hong.github.io/lucy/me2.gif',
@@ -191,6 +191,10 @@
                             animation.style.display = 'block';
                             animationURLDisplay.textContent = '애니메이션 URL: ' + animation.src; // 애니메이션 URL을 화면에 표시
                             console.log('애니메이션 URL:', animation.src); // 애니메이션 URL을 콘솔에 출력
+
+                            // 현재 단어와 애니메이션 URL을 alert로 표시
+                            alert('현재 단어: ' + currentWord);
+                            alert('애니메이션 URL: ' + animation.src);
                         } else {
                             animation.style.display = 'none'; // 애니메이션이 없을 경우 숨김
                             animationURLDisplay.textContent = '애니메이션 URL: '; // URL 초기화
@@ -216,6 +220,11 @@
             const img = new Image();
             img.src = src; // 미리 로드
         });
+
+        recognition.start();
+    </script>
+</body>
+</html>
 
         recognition.start();
     </script>
