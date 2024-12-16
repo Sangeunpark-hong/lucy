@@ -173,14 +173,17 @@
 
                         // 애니메이션 재생
                         if (animationMap[currentWord]) {
-                            animation.src = animationMap[currentWord];
-                            animation.style.display = 'block';
-                            console.log('애니메이션 URL:', animation.src); // 애니메이션 URL을 콘솔에 출력
+                            // 애니메이션 업데이트 전에 잠깐 지연
+                            setTimeout(() => {
+                                animation.src = animationMap[currentWord];
+                                animation.style.display = 'block';
+                                console.log('애니메이션 URL:', animation.src); // 애니메이션 URL을 콘솔에 출력
+                            }, 300); // 300ms 지연
                         } else {
                             animation.style.display = 'none'; // 애니메이션이 없을 경우 숨김
                         }
                     }
-                }, 1000); // 디바운싱 시간을 1000ms로 늘림
+                }, 100); // 디바운싱 시간을 100ms로 설정
             }
         };
 
