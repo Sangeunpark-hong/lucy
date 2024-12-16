@@ -39,8 +39,6 @@
             align-items: center;
             justify-content: center;
         }
-
-        /* 현재 단어와 애니메이션 URL을 표시하는 부분 제거 */
     </style>
 </head>
 <body>
@@ -169,6 +167,7 @@
                 // 디바운싱 적용
                 clearTimeout(debounceTimeout);
                 debounceTimeout = setTimeout(() => {
+                    console.log('디바운싱 후 처리:', currentWord, lastWord); // 디바운싱 후 상태 확인
                     if (currentWord !== lastWord) {
                         lastWord = currentWord;
 
@@ -181,7 +180,7 @@
                             animation.style.display = 'none'; // 애니메이션이 없을 경우 숨김
                         }
                     }
-                }, 500); // 디바운싱 시간을 500ms로 늘림
+                }, 1000); // 디바운싱 시간을 1000ms로 늘림
             }
         };
 
