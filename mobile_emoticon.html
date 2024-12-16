@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모바일 이모티콘 표시</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column; /* 세로 방향으로 정렬 */
+            align-items: center; /* 수평 중앙 정렬 */
+            background-color: black; /* 배경색을 검정으로 설정 */
+        }
+
+        #animation {
+            display: none; /* 기본적으로 숨김 */
+            width: 300px; /* 이모티콘 크기 조정 */
+            height: 300px; /* 이모티콘 크기 조정 */
+            margin-top: 20px; /* 상단 여백 */
+        }
+
+        #topHalf {
+            flex: 1; /* 상단 절반을 차지 */
+            display: flex;
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+            width: 100%; /* 전체 너비 */
+        }
+
+        #bottomHalf {
+            flex: 1; /* 하단 절반을 차지 */
+            width: 100%; /* 전체 너비 */
+        }
+    </style>
+</head>
+<body>
+    <div id="topHalf">
+        <img id="animation" src="" alt="애니메이션"> <!-- 이모티콘 이미지 -->
+    </div>
+    <div id="bottomHalf"></div> <!-- 하단 절반은 비워둡니다 -->
+
+    <script>
+        const animation = document.getElementById('animation');
+
+        // 애니메이션 파일 매핑
+        const animationMap = {
+            '나': 'me.gif',
+            '내': 'me.gif',
+            '저': 'me.gif',
+            '제': 'me.gif',
+            '나는': 'me.gif',
+            '내가': 'me.gif',
+            '나를': 'me.gif',
+            '내게': 'me.gif',
+            '나에게': 'me.gif',
+            '저는': 'me.gif',
+            '저를': 'me.gif',
+            '제가': 'me.gif',
+            '제게': 'me.gif',
+            '저에게': 'me.gif',
+            '너': 'you.gif',
+            '네': 'you.gif',
+            '당신': 'you.gif',
+            '너는': 'you.gif',
+            '너를': 'you.gif',
+            '너가': 'you.gif',
+            '네가': 'you.gif',
+            '당신을': 'you.gif',
+            '당신이': 'you.gif',
+            '당신에게': 'you.gif',
+            '네게': 'you.gif',
+            '너에게': 'you.gif',
+            '당신은': 'you.gif',
+            '너도': 'you.gif', // 추가된 매핑
+            '좋아': 'good.gif',
+            '좋아요': 'good.gif',
+            '좋다': 'good.gif',
+            '좋네': 'good.gif',
+            '그래': 'good.gif',
+            '그래요': 'good.gif',
+            '잘했어': 'good.gif',
+            '잘했어요': 'good.gif',
+            '잘한다': 'good.gif',
+            '잘해요': 'good.gif',
+            '알았어': 'good.gif',
+            '알았어요': 'good.gif',
+            '알겠어': 'good.gif',
+            '알겠어요': 'good.gif',
+            '싫어': 'No.gif',
+            '싫다': 'No.gif',
+            '싫어요': 'No.gif',
+            '아니': 'No.gif',
+            '아니에요': 'No.gif',
+            '아니요': 'No.gif',
+            '안': 'No.gif',
+            '아니야': 'No.gif', // 추가된 매핑
+            '나도': 'me.gif', // 추가된 매핑
+            '예': 'good.gif',
+            '네': 'good.gif',
+            '응': 'good.gif', // 추가된 매핑
+            '맞아': 'good.gif', // 추가된 매핑
+            '도와줘': 'help.gif', // 추가된 매핑
+            '도와주세요': 'help.gif', // 추가된 매핑
+            '도와줄까': 'help_q.gif', // 추가된 매핑
+            '도와줄까요': 'help_q.gif', // 추가된 매핑
+            '사랑하니': 'love_q.gif', // 추가된 매핑
+            '사랑하나요': 'love_q.gif', // 추가된 매핑
+            '아주': 'very.gif',
+            '엄청': 'very.gif',
+            '너무': 'very.gif',
+            '완전': 'very.gif',
+            '더': 'very.gif',
+            '더욱': 'very.gif',
+            '많이': 'very.gif',
+            '안녕': 'HI.gif',
+            '안녕하세요': 'HI.gif',
+            '미안': 'sorry.gif',
+            '미안해요': 'sorry.gif',
+            '죄송해요': 'sorry.gif',
+            '미안해': 'sorry.gif',
+            '괜찮아': 'Thatsokay.gif',
+            '괜찮아요': 'Thatsokay.gif',
+            '축하해': 'congraturation.gif',
+            '축하해요': 'congraturation.gif',
+            '고마워': 'thanks.gif',
+            '감사해요': 'thanks.gif',
+            '고마워요': 'thanks.gif',
+            '고맙다': 'thanks.gif',
+            '사랑해': 'love.gif',
+            '사랑해요': 'love.gif'
+        };
+
+        // 음성 인식 설정
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'ko-KR';
+        recognition.continuous = true; // 계속해서 음성 인식
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            console.log('- 음성 인식 중...');
+        };
+
+        recognition.onresult = (event) => {
+            const text = Array.from(event.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('');
+
+            // 자막에 마지막 단어만 표시
+            const words = text.split(' ');
+            if (words.length > 0) {
+                const lastWord = words[words.length - 1];
+
+                // 애니메이션 재생
+                if (animationMap[lastWord]) {
+                    animation.src = animationMap[lastWord]; // 해당 애니메이션으로 변경
+                    animation.style.display = 'block'; // 애니메이션 표시
+                } else {
+                    animation.style.display = 'none'; // 애니메이션 숨기기
+                }
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error('오류 발생:', event.error);
+        };
+
+        recognition.onend = () => {
+            console.log('음성 인식 종료');
+        };
+
+        // 음성 인식 시작
+        recognition.start();
+    </script>
+</body>
+</html>
